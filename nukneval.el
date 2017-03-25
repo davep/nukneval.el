@@ -1,6 +1,12 @@
 ;;; nukneval.el --- Nuke and reevaluate an elisp buffer.
 ;; Copyright 2002-2017 by Dave Pearson <davep@davep.org>
 
+;; Author: Dave Pearson <davep@davep.org>
+;; Version: 1.1
+;; Keywords: lisp
+;; URL: https://github.com/davep/nukneval.el
+;; Package-Requires: ((cl-lib "0.5"))
+
 ;; nukneval.el is free software distributed under the terms of the GNU
 ;; General Public Licence, version 2. For details see the file COPYING.
 
