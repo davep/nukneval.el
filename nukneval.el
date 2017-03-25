@@ -6,7 +6,7 @@
 
 ;; Things we need:
 (eval-when-compile
-  (require 'cl))
+  (require 'cl-lib))
 
 ;;;###autoload
 (defun nuke-and-eval ()
@@ -14,17 +14,17 @@
   (interactive)
   (save-excursion
     (setf (point) (point-min))
-    (loop for form = (condition-case nil
-                         (read (current-buffer))
-                       (error nil))
-          while form
-          do (let ((type (car form))
-                   (name (cadr form)))
-               (cond
-                 ((memq type '(defun defun* defsubst defalias defmacro))
-                  (fmakunbound name))
-                 ((memq type '(defvar defparameter defconst defcustom))
-                  (makunbound name))))))
+    (cl-loop for form = (condition-case nil
+                            (read (current-buffer))
+                          (error nil))
+       while form
+       do (let ((type (car form))
+                (name (cadr form)))
+            (cond
+              ((memq type '(defun defun* defsubst defalias defmacro))
+               (fmakunbound name))
+              ((memq type '(defvar defparameter defconst defcustom))
+               (makunbound name))))))
   (eval-buffer))
 
 (provide 'nukneval)
