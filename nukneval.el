@@ -11,6 +11,14 @@
 ;; General Public Licence, version 2. For details see the file COPYING.
 
 ;; Things we need:
+
+;;; Commentary:
+;;
+;; nukneval.el provides a command that attempts to cleanly reevaluate a
+;; buffer of elisp code.
+
+;;; Code:
+
 (eval-when-compile
   (require 'cl-lib))
 
