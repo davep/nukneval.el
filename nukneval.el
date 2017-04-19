@@ -10,8 +10,6 @@
 ;; nukneval.el is free software distributed under the terms of the GNU
 ;; General Public Licence, version 2. For details see the file COPYING.
 
-;; Things we need:
-
 ;;; Commentary:
 ;;
 ;; nukneval.el provides a command that attempts to cleanly reevaluate a
