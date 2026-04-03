@@ -1,4 +1,4 @@
-;;; nukneval.el --- Nuke and reevaluate an elisp buffer.
+;;; nukneval.el --- Nuke and reevaluate an Emacs Lisp buffer
 ;; Copyright 2002-2017 by Dave Pearson <davep@davep.org>
 
 ;; Author: Dave Pearson <davep@davep.org>
@@ -32,7 +32,7 @@
 
 ;;;###autoload
 (defun nukneval ()
-  "Attempt to cleanly reevaluate a buffer of elisp code."
+  "Attempt to cleanly reevaluate a buffer of Emacs Lisp code."
   (interactive)
   (save-excursion
     (goto-char (point-min))
