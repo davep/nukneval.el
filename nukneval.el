@@ -31,7 +31,7 @@
   (require 'cl-lib))
 
 (defun nukneval--unbinder (type)
-  "Return the unbinding function for the given form type."
+  "Return the unbinding function for the given form TYPE."
   (cond
    ((memq type '(defun defun* defsubst cl-defun defalias defmacro))
     #'fmakunbound)
