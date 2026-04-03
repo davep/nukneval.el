@@ -46,12 +46,14 @@
                   (cond
                    ((memq type '(defun defun* defsubst cl-defun defalias defmacro))
                     (fmakunbound name)
-                    (push name unbound))
+                    (add-to-list 'unbound (format "%s %s" type name) t))
                    ((memq type '(defvar defparameter defconst defcustom))
                     (makunbound name)
-                    (push name unbound))))
+                    (add-to-list 'unbound (format "%s %s" type name) t))))
              finally
-             (message "Rebound: %s" (string-join (sort (mapcar #'symbol-name unbound) #'string<) ", "))))
+             (with-help-window "*nukneval*"
+               (princ
+                (format "Rebound:\n\n%s" (string-join unbound "\n"))))))
   (eval-buffer))
 
 (provide 'nukneval)
