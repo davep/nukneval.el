@@ -31,7 +31,7 @@
   (require 'cl-lib))
 
 ;;;###autoload
-(defun nuke-and-eval ()
+(defun nukneval ()
   "Attempt to cleanly reevaluate a buffer of elisp code."
   (interactive)
   (save-excursion
