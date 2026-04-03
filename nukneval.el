@@ -39,14 +39,14 @@
     (cl-loop for form = (condition-case nil
                             (read (current-buffer))
                           (error nil))
-       while form
-       do (let ((type (car form))
-                (name (cadr form)))
-            (cond
-              ((memq type '(defun defun* defsubst cl-defun defalias defmacro))
-               (fmakunbound name))
-              ((memq type '(defvar defparameter defconst defcustom))
-               (makunbound name))))))
+             while form
+             do (let ((type (car form))
+                      (name (cadr form)))
+                  (cond
+                   ((memq type '(defun defun* defsubst cl-defun defalias defmacro))
+                    (fmakunbound name))
+                   ((memq type '(defvar defparameter defconst defcustom))
+                    (makunbound name))))))
   (eval-buffer))
 
 (provide 'nukneval)
