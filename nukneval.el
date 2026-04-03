@@ -30,30 +30,35 @@
 (eval-when-compile
   (require 'cl-lib))
 
+(defun nukneval--unbinder (type)
+  "Return the unbinding function for the given form type."
+  (cond
+   ((memq type '(defun defun* defsubst cl-defun defalias defmacro))
+    #'fmakunbound)
+   ((memq type '(defvar defparameter defconst defcustom))
+    #'makunbound)))
+
 ;;;###autoload
 (defun nukneval ()
   "Attempt to cleanly reevaluate a buffer of Emacs Lisp code."
   (interactive)
   (save-excursion
     (goto-char (point-min))
-    (cl-loop for form = (condition-case nil
+    (cl-loop with unbound = nil
+             for form = (condition-case nil
                             (read (current-buffer))
                           (error nil))
-             with unbound = nil
              while form
              do (let ((type (car form))
                       (name (cadr form)))
-                  (cond
-                   ((memq type '(defun defun* defsubst cl-defun defalias defmacro))
-                    (fmakunbound name)
-                    (add-to-list 'unbound (format "%s %s" type name) t))
-                   ((memq type '(defvar defparameter defconst defcustom))
-                    (makunbound name)
-                    (add-to-list 'unbound (format "%s %s" type name) t))))
-             finally
-             (with-help-window "*nukneval*"
-               (princ
-                (format "Rebound:\n\n%s" (string-join unbound "\n"))))))
+                  (when-let ((unbind (nukneval--unbinder type)))
+                    (funcall unbind name)
+                    (push (format "%s %s" type name) unbound)))
+             finally (if unbound
+                         (with-help-window "*nukneval*"
+                           (princ
+                            (format "Nuked and evaluated:\n\n%s" (string-join (reverse unbound) "\n"))))
+                       (message "Nothing to nuke and evaluate."))))
   (eval-buffer))
 
 (provide 'nukneval)
