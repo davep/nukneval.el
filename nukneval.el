@@ -1,8 +1,8 @@
 ;;; nukneval.el --- Nuke and reevaluate an Emacs Lisp buffer  -*- lexical-binding: t; -*-
-;; Copyright 2002-2017 by Dave Pearson <davep@davep.org>
+;; Copyright 2002-2026 by Dave Pearson <davep@davep.org>
 
 ;; Author: Dave Pearson <davep@davep.org>
-;; Version: 1.2
+;; Version: 1.3
 ;; Keywords: lisp
 ;; URL: https://github.com/davep/nukneval.el
 ;; Package-Requires: ((emacs "24.4"))
