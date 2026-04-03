@@ -35,7 +35,7 @@
   "Attempt to cleanly reevaluate a buffer of elisp code."
   (interactive)
   (save-excursion
-    (setf (point) (point-min))
+    (goto-char (point-min))
     (cl-loop for form = (condition-case nil
                             (read (current-buffer))
                           (error nil))
