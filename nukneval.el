@@ -5,7 +5,7 @@
 ;; Version: 1.2
 ;; Keywords: lisp
 ;; URL: https://github.com/davep/nukneval.el
-;; Package-Requires: ((cl-lib "0.5"))
+;; Package-Requires: ((emacs "24.4"))
 
 ;; This program is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by the
@@ -31,22 +31,27 @@
   (require 'cl-lib))
 
 ;;;###autoload
-(defun nuke-and-eval ()
+(defun nukneval ()
   "Attempt to cleanly reevaluate a buffer of elisp code."
   (interactive)
   (save-excursion
-    (setf (point) (point-min))
+    (goto-char (point-min))
     (cl-loop for form = (condition-case nil
                             (read (current-buffer))
                           (error nil))
-       while form
-       do (let ((type (car form))
-                (name (cadr form)))
-            (cond
-              ((memq type '(defun defun* defsubst cl-defun defalias defmacro))
-               (fmakunbound name))
-              ((memq type '(defvar defparameter defconst defcustom))
-               (makunbound name))))))
+             with unbound = nil
+             while form
+             do (let ((type (car form))
+                      (name (cadr form)))
+                  (cond
+                   ((memq type '(defun defun* defsubst cl-defun defalias defmacro))
+                    (fmakunbound name)
+                    (push name unbound))
+                   ((memq type '(defvar defparameter defconst defcustom))
+                    (makunbound name)
+                    (push name unbound))))
+             finally
+             (message "Rebound: %s" (string-join (sort (mapcar #'symbol-name unbound) #'string<) ", "))))
   (eval-buffer))
 
 (provide 'nukneval)
