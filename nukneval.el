@@ -5,7 +5,7 @@
 ;; Version: 1.2
 ;; Keywords: lisp
 ;; URL: https://github.com/davep/nukneval.el
-;; Package-Requires: ((cl-lib "0.5"))
+;; Package-Requires: ((emacs "24.4"))
 
 ;; This program is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by the
@@ -39,14 +39,19 @@
     (cl-loop for form = (condition-case nil
                             (read (current-buffer))
                           (error nil))
+             with unbound = nil
              while form
              do (let ((type (car form))
                       (name (cadr form)))
                   (cond
                    ((memq type '(defun defun* defsubst cl-defun defalias defmacro))
-                    (fmakunbound name))
+                    (fmakunbound name)
+                    (push name unbound))
                    ((memq type '(defvar defparameter defconst defcustom))
-                    (makunbound name))))))
+                    (makunbound name)
+                    (push name unbound))))
+             finally
+             (message "Rebound: %s" (string-join (sort (mapcar #'symbol-name unbound) #'string<) ", "))))
   (eval-buffer))
 
 (provide 'nukneval)
